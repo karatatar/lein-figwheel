@@ -12,6 +12,7 @@
    [digest]
    [cljsbuild.util :as util]
    [clojure.set :refer [intersection]]
+   [clojure.java.browse]
    [clj-stacktrace.core :refer [parse-exception]]
    [clj-stacktrace.repl :refer [pst-on]]
    [clojure.pprint :as p]))
@@ -259,7 +260,9 @@
   (let [state (create-initial-state opts)]
     (println (str "Figwheel: Starting server at http://localhost:" (:server-port state)))
     (println (str "Figwheel: Serving files from 'resources/" (:http-server-root state) "'"))
-    (assoc state :http-server (server state))))
+    (assoc state :http-server (server state))
+    (clojure.java.browse/browse-url (str "http://localhost:" (:server-port state) "/index.html"))
+    state))
 
 (defn start-static-server [{:keys [js-dirs http-server-root] :as opts}]
   (let [http-s-root (or http-server-root "public")]
